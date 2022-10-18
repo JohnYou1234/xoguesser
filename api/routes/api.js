@@ -24,7 +24,7 @@ router.get("/generateRandom", (req, res) => {
           function (err, result) {
             res.send({
               'message': result.input,
-              'type': 'input'
+              'type': 'manual'
             })
             return;
           })
@@ -32,7 +32,8 @@ router.get("/generateRandom", (req, res) => {
     } catch(err) {
       console.log(err);
       res.send({
-        'message': err.toString()
+        'message': err.toString(),
+        'type': 'error'
       })
       return;
     }
