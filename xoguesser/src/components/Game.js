@@ -1,4 +1,4 @@
-import Code from './Display.js';
+import Display from './Display.js';
 import Controls from './Controls.js'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -6,8 +6,25 @@ import Col from 'react-bootstrap/Col';
 import Results from './Results.js';
 import { useEffect, useState } from 'react';
 function Game() {
+    const [code, setCode] = useState("");
     const [answer, setAnswer] = useState("");
     const [result, setResults] = useState(0) // 0 is none, 1 is correct, 2 is incorrect
+    const [id, setId] = useState(false);
+    useEffect(() => {
+      let link = "api/generateRandom";
+      console.log('useeffect ran!');
+      fetch(link) 
+        .then(res => res.json())
+        .then(result => {
+            setId(false);
+            setCode(result.message);
+            setAnswer(result.type);
+            setResults(0);
+        })
+        .catch(err => {
+            setAnswer(err.message);
+        })
+    }, [id])
     return (
     <div className="App">
         <Container className='centered'>
@@ -21,13 +38,13 @@ function Game() {
 
             <Row>
                 <Col>
-                    <Code setAnswer={setAnswer}/>
+                    <Display code={code}/>
                 </Col>
             </Row>
 
             <Row>
                 <Col>
-                    <Controls answer={answer} setResults={setResults}/>
+                    <Controls reset={() => {setId(true)}} answer={answer} setResults={setResults}/>
                 </Col>
             </Row>
 
